@@ -21,7 +21,7 @@ module.exports = {
       },
       picture: {
         type: Sequelize.ARRAY(Sequelize.TEXT),
-        allowNull: false,
+        allowNull: true,
       },
       releaseDate: {
         allowNull: false,
@@ -37,7 +37,7 @@ module.exports = {
       },
     });
   },
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
     await queryInterface.dropTable('Sneakers');
   },
 };
