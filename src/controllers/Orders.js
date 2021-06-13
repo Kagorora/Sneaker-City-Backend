@@ -74,6 +74,26 @@ class orderManager {
       orders,
     });
   }
+
+  static async removeOrder(req, res) {
+    const orders = await Order.findAll({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    if (orders.length === 0)
+      return res.status(404).send({
+        error: `Order not found`,
+      });
+
+    await Order.destroy({ where: { id: `${req.params.id}` } });
+
+    return res.status(204).json({
+      status: 204,
+      message: 'Order removed successfully',
+    });
+  }
 }
 
 export default orderManager;
