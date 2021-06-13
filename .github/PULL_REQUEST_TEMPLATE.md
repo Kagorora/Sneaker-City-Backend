@@ -6,9 +6,9 @@
 
 - Name all the task completed in reference to the one listed in the Pivotal Tracker description
 
-  - [] Task One
+  - [ ] Task One
 
-  - [] Task Two
+  - [ ] Task Two
 
 #### How should this be manually tested?
 
