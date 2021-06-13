@@ -29,6 +29,13 @@ class orderManager {
         },
       });
 
+      // check if the ordered Quantity is not more than what is available in the stock
+      if (req.body.orderQuantity > shoeExists[0].quantity) {
+        return res.status(400).send({
+          message: `Only ${shoeExists[0].quantity} are available`,
+        });
+      }
+
       if (orderExists.length > 0)
         return res.status(409).send({
           message: `Order already made, please check your cart`,

@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       shoeId: DataTypes.UUID,
       size: DataTypes.INTEGER,
+      orderQuantity: DataTypes.INTEGER,
     },
     {},
   );

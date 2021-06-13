@@ -12,8 +12,13 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
         allowNull: false,
       },
+      orderQuantity: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       size: {
         type: Sequelize.INTEGER,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
