@@ -5,6 +5,7 @@ import { orderSchema } from '../validation/schema/orders';
 
 const router = express.Router();
 
+router.get('/', orderController.viewAllOrders);
 router.post('/:id', validator(orderSchema), orderController.addOrder);
 
 export default router;
