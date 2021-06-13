@@ -11,5 +11,13 @@ module.exports = (sequelize, DataTypes) => {
     {},
   );
 
+  Sneakers.associate = (models) => {
+    Sneakers.hasMany(models.Sizes, {
+      foreignKey: 'sneakersId',
+      as: 'sizes',
+      timestamps: false,
+    });
+  };
+
   return Sneakers;
 };

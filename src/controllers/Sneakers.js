@@ -4,7 +4,7 @@ import { uploader } from '../middleware/cloudinary';
 import path from 'path';
 import imageDataURI from 'image-data-uri';
 
-const { Sneakers } = model;
+const { Sneakers, Sizes } = model;
 
 class SneakersManager {
   static async registerSneaker(req, res) {
@@ -43,10 +43,6 @@ class SneakersManager {
         return res.status(201).send({
           message: `${req.body.model} added successful`,
         });
-
-      return res.status(201).send({
-        message: `${req.body.category} added successful`,
-      });
     } catch (error) {
       return res.status(500).send({
         error: 'Server error',
@@ -66,6 +62,65 @@ class SneakersManager {
       return res.status(200).send({
         sneakers,
       });
+    } catch (error) {
+      return res.status(500).send({
+        error: 'Server error',
+      });
+    }
+  }
+
+  static async getSelectedSneaker(req, res) {
+    try {
+      const sneakers = await Sneakers.findAll({
+        where: {
+          id: `${req.params.id}`,
+        },
+        include: [
+          { model: Sizes, as: 'sizes' },
+          {
+            model: Sizes,
+            as: 'sizes',
+          },
+        ],
+      });
+
+      if (sneakers.length === 0)
+        return res.status(409).send({
+          message: `no result found!`,
+        });
+
+      return res.status(200).send({
+        sneakers,
+      });
+    } catch (error) {
+      return res.status(500).send({
+        error: 'Server error',
+      });
+    }
+  }
+
+  static async addQuantity(req, res) {
+    try {
+      const sneakers = await Sizes.findAll({
+        where: {
+          sneakersId: `${req.params.id}`,
+          size: `${req.body.size}`,
+        },
+      });
+
+      if (sneakers.length > 0)
+        return res.status(409).send({
+          message: `Size already exists, please consider changing the existing one`,
+        });
+
+      const id = uuidv4();
+
+      const size = await Sizes.create({ ...req.body, id, sneakersId: req.params.id });
+
+      if (size)
+        return res.status(201).send({
+          message: `Size ${req.body.size} added successful`,
+        });
     } catch (error) {
       return res.status(500).send({
         error: 'Server error',
