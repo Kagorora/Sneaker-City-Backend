@@ -1,7 +1,7 @@
 import model from '../database/models';
 import { v4 as uuidv4 } from 'uuid';
 
-const { Sizes, Order } = model;
+const { Sizes, Order, Sneakers } = model;
 
 class orderManager {
   static async addOrder(req, res) {
@@ -52,6 +52,27 @@ class orderManager {
         error: error,
       });
     }
+  }
+
+  static async viewAllOrders(req, res) {
+    const orders = await Order.findAll({
+      include: [
+        { model: Sneakers, as: 'order' },
+        {
+          model: Sneakers,
+          as: 'order',
+        },
+      ],
+    });
+
+    if (orders.length < 1)
+      return res.status(404).send({
+        error: `Cart is empty`,
+      });
+
+    return res.status(200).send({
+      orders,
+    });
   }
 }
 
