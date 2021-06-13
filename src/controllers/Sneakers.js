@@ -53,6 +53,25 @@ class SneakersManager {
       });
     }
   }
+
+  static async getRecentSneaker(req, res) {
+    try {
+      const sneakers = await Sneakers.findAll({ limit: 10, order: [['updatedAt', 'DESC']] });
+
+      if (sneakers.length === 0)
+        return res.status(409).send({
+          message: `no result found!`,
+        });
+
+      return res.status(200).send({
+        sneakers,
+      });
+    } catch (error) {
+      return res.status(500).send({
+        error: 'Server error',
+      });
+    }
+  }
 }
 
 export default SneakersManager;

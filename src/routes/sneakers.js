@@ -9,5 +9,6 @@ const router = express.Router();
 
 router.use('*', cloudinaryConfig);
 router.post('/', multerUploads, validator(sneakersSchema), clientController.registerSneaker);
+router.get('/', clientController.getRecentSneaker);
 
 export default router;
