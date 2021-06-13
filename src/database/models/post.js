@@ -17,6 +17,12 @@ module.exports = (sequelize, DataTypes) => {
       as: 'sizes',
       timestamps: false,
     });
+
+    Sneakers.hasMany(models.Order, {
+      foreignKey: 'shoeId',
+      as: 'order',
+      timestamps: false,
+    });
   };
 
   return Sneakers;
