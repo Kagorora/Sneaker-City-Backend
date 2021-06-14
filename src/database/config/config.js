@@ -25,14 +25,15 @@ const config = {
     password: process.env.DB_PASSWORD_PRO,
     database: process.env.DB_NAME_PRO,
     host: process.env.DB_HOST_PRO,
-    dialect: 'postgres',
-    operatorsAliases: false,
+    url: process.env.DATABASE_URL_PRO,
     ssl: true,
+    dialect: 'postgres',
     dialectOptions: {
       ssl: {
-        require: true,
+        rejectUnauthorized: false,
       },
     },
+    logging: false,
   },
 };
 
