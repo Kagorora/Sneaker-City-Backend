@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { uploader } from '../middleware/cloudinary';
 import path from 'path';
 import imageDataURI from 'image-data-uri';
+import sequelize, { Op } from 'sequelize';
 
 const { Sneakers, Sizes } = model;
 
@@ -52,7 +53,7 @@ class SneakersManager {
 
   static async getRecentSneaker(req, res) {
     try {
-      const sneakers = await Sneakers.findAll({ limit: 10, order: [['updatedAt', 'DESC']] });
+      const sneakers = await Sneakers.findAll({ limit: 10, order: [['releaseDate', 'DESC']] });
 
       if (sneakers.length === 0)
         return res.status(409).send({
@@ -121,6 +122,40 @@ class SneakersManager {
         return res.status(201).send({
           message: `Size ${req.body.size} added successful`,
         });
+    } catch (error) {
+      return res.status(500).send({
+        error: 'Server error',
+      });
+    }
+  }
+
+  static async searchShoe(req, res) {
+    try {
+      // const sneakers = await Sneakers.findAll({
+      //   where: {
+      //     model: `${req.params.keyword}`,
+      //   },
+      // });
+
+      const sneakers = await Sneakers.findAll({
+        where: {
+          model: sequelize.where(
+            sequelize.fn('LOWER', sequelize.col('model')),
+            'LIKE',
+            // eslint-disable-next-line no-useless-concat
+            '%' + `${req.params.keyword.toLowerCase()}` + '%',
+          ),
+        },
+      });
+
+      if (sneakers.length === 0)
+        return res.status(400).send({
+          message: `No result found of ${req.params.keyword}`,
+        });
+
+      return res.status(200).send({
+        sneakers,
+      });
     } catch (error) {
       return res.status(500).send({
         error: 'Server error',
