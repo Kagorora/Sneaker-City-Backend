@@ -131,18 +131,11 @@ class SneakersManager {
 
   static async searchShoe(req, res) {
     try {
-      // const sneakers = await Sneakers.findAll({
-      //   where: {
-      //     model: `${req.params.keyword}`,
-      //   },
-      // });
-
       const sneakers = await Sneakers.findAll({
         where: {
           model: sequelize.where(
             sequelize.fn('LOWER', sequelize.col('model')),
             'LIKE',
-            // eslint-disable-next-line no-useless-concat
             '%' + `${req.params.keyword.toLowerCase()}` + '%',
           ),
         },
