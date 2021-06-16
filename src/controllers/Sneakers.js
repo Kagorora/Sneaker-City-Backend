@@ -53,7 +53,17 @@ class SneakersManager {
 
   static async getRecentSneaker(req, res) {
     try {
-      const sneakers = await Sneakers.findAll({ limit: 10, order: [['releaseDate', 'DESC']] });
+      const sneakers = await Sneakers.findAll({
+        limit: 10,
+        order: [['createdAt', 'DESC']],
+        include: [
+          { model: Sizes, as: 'sizes' },
+          {
+            model: Sizes,
+            as: 'sizes',
+          },
+        ],
+      });
 
       if (sneakers.length === 0)
         return res.status(409).send({
