@@ -28,9 +28,10 @@ class SneakersManager {
       const images = [];
 
       // eslint-disable-next-line no-unused-vars
-      for (const image in req.files) {
-        const dataBuffer = new Buffer.from(req.files.picture[0].buffer);
-        const mediaType = path.extname(req.files.picture[0].originalname).toString();
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < req.files.picture.length; i++) {
+        const dataBuffer = new Buffer.from(req.files.picture[i].buffer);
+        const mediaType = path.extname(req.files.picture[i].originalname).toString();
 
         const imageData = imageDataURI.encode(dataBuffer, mediaType);
         const uploadedImage = await uploader.upload(imageData);
@@ -53,10 +54,20 @@ class SneakersManager {
 
   static async getRecentSneaker(req, res) {
     try {
-      const sneakers = await Sneakers.findAll({ limit: 10, order: [['releaseDate', 'DESC']] });
+      const sneakers = await Sneakers.findAll({
+        limit: 10,
+        order: [['createdAt', 'DESC']],
+        include: [
+          { model: Sizes, as: 'sizes' },
+          {
+            model: Sizes,
+            as: 'sizes',
+          },
+        ],
+      });
 
       if (sneakers.length === 0)
-        return res.status(409).send({
+        return res.status(404).send({
           message: `no result found!`,
         });
 

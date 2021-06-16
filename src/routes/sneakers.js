@@ -12,7 +12,7 @@ router.use('*', cloudinaryConfig);
 router.post('/', multerUploads, validator(sneakersSchema), clientController.registerSneaker);
 router.get('/:keyword', clientController.searchShoe);
 router.get('/', clientController.getRecentSneaker);
-router.get('/:id', clientController.getSelectedSneaker);
+router.get('/search/:id', clientController.getSelectedSneaker);
 router.post('/sizes/:id', validator(sizesSchema), clientController.addQuantity);
 
 export default router;
